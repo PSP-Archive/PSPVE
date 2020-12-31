@@ -1,0 +1,19 @@
+1.0.2
+
+- Major speed improvements :
+  + 6809 emulation 
+  + vector rendering
+  + remove vector cash (buggy and time consuming)
+- Sound emulation completly rewritten and inspired 
+  from 8910 driver of xmame. 
+- The rotate 90' view is now much faster and it is used 
+  as default render mode.
+- Save state modification, it is now faster to save state
+  (but previously saved games are not compatible with this
+  new version !)
+- Add .vec and .gam file extention as valid rom extention
+- Add option to change color between gray and blue 
+
+1.0.1
+
+- Intial release
