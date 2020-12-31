@@ -75,61 +75,61 @@ unsigned char cart[32768];
 unsigned char ram[1024];
 
 unsigned snd_regs[16];
-static unsigned snd_select;
+unsigned snd_select;
 
 /* the via 6522 registers */
 
-static unsigned via_ora;
-static unsigned via_orb;
-static unsigned via_ddra;
-static unsigned via_ddrb;
-static unsigned via_t1on;  /* is timer 1 on? */
-static unsigned via_t1int; /* are timer 1 interrupts allowed? */
-static unsigned short via_t1c;
-static unsigned char  via_t1ll;
-static unsigned via_t1lh;
-static unsigned via_t1pb7; /* timer 1 controlled version of pb7 */
-static unsigned via_t2on;  /* is timer 2 on? */
-static unsigned via_t2int; /* are timer 2 interrupts allowed? */
-static unsigned short via_t2c;
-static unsigned char via_t2ll;
-static unsigned via_sr;
-static unsigned via_srb;   /* number of bits shifted so far */
-static unsigned char via_src;   /* shift counter */
-static unsigned via_srclk;
-static unsigned via_acr;
-static unsigned via_pcr;
-static unsigned via_ifr;
-static unsigned via_ier;
-static unsigned char via_ca2;
-static unsigned via_cb2h;  /* basic handshake version of cb2 */
-static unsigned via_cb2s;  /* version of cb2 controlled by the shift register */
+unsigned via_ora;
+unsigned via_orb;
+unsigned via_ddra;
+unsigned via_ddrb;
+unsigned via_t1on;  /* is timer 1 on? */
+unsigned via_t1int; /* are timer 1 interrupts allowed? */
+unsigned short via_t1c;
+unsigned char  via_t1ll;
+unsigned via_t1lh;
+unsigned via_t1pb7; /* timer 1 controlled version of pb7 */
+unsigned via_t2on;  /* is timer 2 on? */
+unsigned via_t2int; /* are timer 2 interrupts allowed? */
+unsigned short via_t2c;
+unsigned char via_t2ll;
+unsigned via_sr;
+unsigned via_srb;   /* number of bits shifted so far */
+unsigned char via_src;   /* shift counter */
+unsigned via_srclk;
+unsigned via_acr;
+unsigned via_pcr;
+unsigned via_ifr;
+unsigned via_ier;
+unsigned char via_ca2;
+unsigned via_cb2h;  /* basic handshake version of cb2 */
+unsigned via_cb2s;  /* version of cb2 controlled by the shift register */
 
 /* analog devices */
 
-static unsigned alg_rsh;  /* zero ref sample and hold */
-static unsigned alg_xsh;  /* x sample and hold */
-static unsigned alg_ysh;  /* y sample and hold */
-static unsigned alg_zsh;  /* z sample and hold */
+unsigned alg_rsh;  /* zero ref sample and hold */
+unsigned alg_xsh;  /* x sample and hold */
+unsigned alg_ysh;  /* y sample and hold */
+unsigned alg_zsh;  /* z sample and hold */
        unsigned alg_jch0;      /* joystick direction channel 0 */
        unsigned alg_jch1;      /* joystick direction channel 1 */
        unsigned alg_jch2;      /* joystick direction channel 2 */
        unsigned alg_jch3;      /* joystick direction channel 3 */
-static unsigned alg_jsh;  /* joystick sample and hold */
+unsigned alg_jsh;  /* joystick sample and hold */
 
-static unsigned alg_compare;
+unsigned alg_compare;
 
-static long alg_dx;     /* delta x */
-static long alg_dy;     /* delta y */
-static point_t alg_curr; /* current x position */
+long alg_dx;     /* delta x */
+long alg_dy;     /* delta y */
+point_t alg_curr; /* current x position */
 
-static unsigned alg_vectoring; /* are we drawing a vector right now? */
-static point_t alg_vector0;
-static point_t alg_vector1;
-static long alg_vector_dx;
-static long alg_vector_dy;
-static unsigned char alg_vector_color;
-static vector_t vectors_set[2 * VECTOR_CNT];
+unsigned alg_vectoring; /* are we drawing a vector right now? */
+point_t alg_vector0;
+point_t alg_vector1;
+long alg_vector_dx;
+long alg_vector_dy;
+unsigned char alg_vector_color;
+vector_t vectors_set[2 * VECTOR_CNT];
 
 
 long vector_draw_cnt;
@@ -140,7 +140,7 @@ vector_t *vectors_erse;
 
 /* update the snd chips internal registers when via_ora/via_orb changes */
 
-static inline void snd_update (void)
+inline void snd_update (void)
 {
   switch (via_orb & 0x18) {
   case 0x00:
@@ -170,7 +170,7 @@ static inline void snd_update (void)
 
 /* update the various analog values when orb is written. */
 
-static inline void alg_update (void)
+inline void alg_update (void)
 {
   switch (via_orb & 0x06) {
   case 0x00:
@@ -229,7 +229,7 @@ static inline void alg_update (void)
  * ifr.
  */
 
-static inline void int_update (void)
+inline void int_update (void)
 {
   if (via_ifr & via_ier & 0x7f) {
     via_ifr |= 0x80;
@@ -849,7 +849,7 @@ vecx_load_state(char* filename)
  * via_sstep0 is the first postion of the emulation.
  */
 
-static void inline via_sstep0 (void)
+void inline via_sstep0 (void)
 {
   unsigned char t2shift;
   if (via_t1on) {
@@ -937,7 +937,7 @@ static void inline via_sstep0 (void)
 
 /* perform the second part of the via emulation */
 
-static void inline via_sstep1 (void)
+void inline via_sstep1 (void)
 {
   if ((via_pcr & 0x0e) == 0x0a) {
     /* if ca2 is in pulse mode, then make sure
@@ -954,7 +954,7 @@ static void inline via_sstep1 (void)
   }
 }
 
-static inline void alg_addline (point_t* p0, point_t* p1, unsigned char color)
+inline void alg_addline (point_t* p0, point_t* p1, unsigned char color)
 {
   vector_t* a_vector = &vectors_draw[vector_draw_cnt];
   a_vector->p0 = *p0;
@@ -965,7 +965,7 @@ static inline void alg_addline (point_t* p0, point_t* p1, unsigned char color)
 
 /* perform a single cycle worth of analog emulation */
 
-static void inline alg_sstep (void)
+void inline alg_sstep (void)
 {
   long sig_dx, sig_dy;
   unsigned sig_ramp;

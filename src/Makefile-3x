@@ -42,13 +42,14 @@ MORE_CFLAGS=\
  -fno-strength-reduce -finline-functions \
  -DSOUND_SUPPORT \
  -fsingle-precision-constant \
- -DNO_STDIO_REDIRECT
+ -DNO_STDIO_REDIRECT \
+ -G0
 
 OPTIM_CFLAGS= -O2
 
 CFLAGS = $(DEFAULT_CFLAGS) $(MORE_CFLAGS)
 
-LIBS = -lpspirkeyb -lSDL_image -lSDL -lpng -ljpeg -lm -lc -lz -lpsphprm -lpspgu -lpsppower -lpspaudio
+LIBS = -lpspirkeyb -lSDL_image -lSDL -lGL -lpsprtc -lpng -ljpeg -lm -lc -lz -lpsphprm -lpspgu -lpsppower -lpspaudio -lpspvfpu
 
 BUILD_PRX=1
 
